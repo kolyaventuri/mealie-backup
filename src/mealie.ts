@@ -40,7 +40,7 @@ export function createMealieClient(baseUrl: string, apiKey: string) {
 
   async function getDownloadToken(filename: string): Promise<string> {
     const res = await apiFetch(
-      `/api/admin/backups/${encodeURIComponent(filename)}/download`
+      `/api/admin/backups/${encodeURIComponent(filename)}`
     );
     const data = (await res.json()) as { fileToken: string };
     return data.fileToken;
