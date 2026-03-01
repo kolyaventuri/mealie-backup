@@ -23,7 +23,7 @@ export function createS3Client(config: S3Config) {
       new PutObjectCommand({
         Bucket: config.bucket,
         Key: fullKey,
-        Body: Readable.fromWeb(stream),
+        Body: Readable.fromWeb(stream as Parameters<typeof Readable.fromWeb>[0]),
         ContentType: "application/zip",
       })
     );
