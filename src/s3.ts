@@ -4,6 +4,7 @@ import {
   ListObjectsV2Command,
   DeleteObjectsCommand,
 } from "@aws-sdk/client-s3";
+import { Readable } from "stream";
 export interface S3Config {
   region: string;
   bucket: string;
@@ -22,7 +23,7 @@ export function createS3Client(config: S3Config) {
       new PutObjectCommand({
         Bucket: config.bucket,
         Key: fullKey,
-        Body: stream,
+        Body: Readable.fromWeb(stream),
         ContentType: "application/zip",
       })
     );
