@@ -1,0 +1,36 @@
+# Example: add mealie-backup as a sidecar to your existing Mealie docker-compose stack.
+# Copy the relevant sections into your existing docker-compose.yml.
+
+services:
+  mealie:
+    image: ghcr.io/mealie-recipes/mealie:latest
+    container_name: mealie
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+    environment:
+      PUID: 1000
+      PGID: 1000
+    volumes:
+      - mealie-data:/app/data
+    networks:
+      - mealie-net
+
+  mealie-backup:
+    build: .                     # or use an image if you publish one
+    container_name: mealie-backup
+    restart: unless-stopped
+    env_file: .env               # copy .env.example → .env and fill in values
+    environment:
+      MEALIE_URL: http://mealie:9000   # reaches Mealie by container name on the shared network
+    networks:
+      - mealie-net
+    depends_on:
+      - mealie
+
+volumes:
+  mealie-data:
+
+networks:
+  mealie-net:
+    driver: bridge
