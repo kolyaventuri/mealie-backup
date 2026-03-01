@@ -1,9 +1,5 @@
-import {
-  S3Client,
-  PutObjectCommand,
-  ListObjectsV2Command,
-  DeleteObjectsCommand,
-} from "@aws-sdk/client-s3";
+import { S3Client, ListObjectsV2Command, DeleteObjectsCommand } from "@aws-sdk/client-s3";
+import { Upload } from "@aws-sdk/lib-storage";
 import { Readable } from "stream";
 export interface S3Config {
   region: string;
@@ -19,14 +15,15 @@ export function createS3Client(config: S3Config) {
     const fullKey = `${config.prefix}${key}`;
     console.log(`[s3] uploading to s3://${config.bucket}/${fullKey}`);
 
-    await client.send(
-      new PutObjectCommand({
+    await new Upload({
+      client,
+      params: {
         Bucket: config.bucket,
         Key: fullKey,
         Body: Readable.fromWeb(stream as Parameters<typeof Readable.fromWeb>[0]),
         ContentType: "application/zip",
-      })
-    );
+      },
+    }).done();
 
     console.log(`[s3] upload complete: ${fullKey}`);
   }
