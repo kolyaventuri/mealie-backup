@@ -1,5 +1,7 @@
 # mealie-backup
 
+_NOTE:_ This is entirely vibe-coded.
+
 A Docker sidecar service that runs on a cron schedule, triggers a [Mealie](https://mealie.io) backup via its API, and uploads the resulting ZIP to AWS S3. Old backups are pruned from both Mealie and S3 automatically.
 
 ## How it works
